@@ -2,6 +2,7 @@
 #define LEXER_H
 
 #include <stdexcept>
+#include <memory>
 
 class AbstractScanner;
 
@@ -25,8 +26,7 @@ struct Token {
 };
 
 class Lexer {
-    friend class TestSuite;
-    AbstractScanner* scanner = nullptr;
+    std::shared_ptr<AbstractScanner> scanner = nullptr;
     char take_s() noexcept(false);
     char peek_s() noexcept(false);
     void makeSure(bool condition, std::string const& msg) {
@@ -45,6 +45,7 @@ class Lexer {
     Token<void*> greaterThan() noexcept(false);
     Token<void*> equal() noexcept(false);
 
+public:
     Token<void*> scanIdentifier() noexcept(false);
     Token<NumType> scanNumber() noexcept(false);
     Token<void*> scanChar() noexcept(false);
@@ -55,9 +56,8 @@ class Lexer {
     Token<std::string> scanDirective() noexcept(false);
     Token<void*> scanOperator() noexcept(false);
     void skipBlank();
-public:
-    Lexer(AbstractScanner* scanner);
-    void setScanner(AbstractScanner* scanner);
+    Lexer(std::shared_ptr<AbstractScanner> scanner);
+    void setScanner(std::shared_ptr<AbstractScanner> scanner);
     bool eof();
     std::pair<std::string, std::string> getNext() noexcept(false);
 };

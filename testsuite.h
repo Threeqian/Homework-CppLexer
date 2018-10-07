@@ -7,13 +7,14 @@
 #include "abstractscanner.h"
 #include "lexer.h"
 #include <iostream>
+#include <memory>
 
 class DebugScanner : public AbstractScanner {
-    static DebugScanner* singleton;
     std::deque<char> strs;
-    char tmp;   
+    char tmp;
+    DebugScanner() = default;
 public:
-    static DebugScanner* buildScanner(std::string const& str);
+    static std::shared_ptr<DebugScanner> buildScanner(std::string const& str);
     char* peek() override {
         if (strs.empty()) return nullptr;
         tmp = strs.front();

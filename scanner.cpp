@@ -3,16 +3,13 @@
 #include <QDir>
 #include <iterator>
 
-Scanner* Scanner::singleton = nullptr;
-
-Scanner& Scanner::setBufferSize(int size) {
+void Scanner::setBufferSize(int size) {
     if (size > 0) {
         if (!dynamicBuf) delete dynamicBuf;
         dynamicBuf = new char[size];
         bufferSize = size;
     }
     else throw std::runtime_error("bufferSize < 0");
-    return *this;
 }
 
 void Scanner::setFilename(std::string const& filename) {
@@ -44,16 +41,16 @@ char* Scanner::scan(bool peek) {
     return &lookAhead;
 }
 
-Scanner* Scanner::buildScanner(std::string const& filename) {
-    if (singleton == nullptr) {
-        singleton = new Scanner();
-    }
-    Scanner* s = dynamic_cast<Scanner*>(singleton);
-    s->buffer.clear();
+std::shared_ptr<Scanner> Scanner::buildScanner(std::string const& filename) {
+    std::shared_ptr<Scanner> s(new Scanner);
     s->setBufferSize(64);
     s->setFilename(filename);
     s->lookAhead = ' ';
     return s;
+}
+
+Scanner::~Scanner() {
+    if (!dynamicBuf) delete dynamicBuf;
 }
 
 char* Scanner::peek() {

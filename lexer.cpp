@@ -6,12 +6,12 @@
 
 static const char blank = ' ';
 
-Lexer::Lexer(AbstractScanner* scanner) {
+Lexer::Lexer(std::shared_ptr<AbstractScanner> scanner) {
     if (!scanner) throw std::runtime_error("scanner unavailable");
     this->scanner = scanner;
 }
 
-void Lexer::setScanner(AbstractScanner* scanner) {
+void Lexer::setScanner(std::shared_ptr<AbstractScanner> scanner) {
     if (!scanner) throw std::runtime_error("scanner unavailable");
     this->scanner = scanner;
 }

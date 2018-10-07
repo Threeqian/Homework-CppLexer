@@ -1,19 +1,13 @@
 #include "testsuite.h"
 #include <iostream>
 
-DebugScanner* DebugScanner::singleton = nullptr;
-
 Lexer TestSuite::lexer = Lexer(DebugScanner::buildScanner(""));
 using Data = std::vector<Case>;
 
-DebugScanner* DebugScanner::buildScanner(std::string const& str) {
-    if (singleton == nullptr) {
-        singleton = new DebugScanner();
-    }
-    DebugScanner* s = dynamic_cast<DebugScanner*>(singleton);
-    s->strs.clear();
-    s->strs.insert(s->strs.end(), str.begin(), str.end());
-    return s;
+std::shared_ptr<DebugScanner> DebugScanner::buildScanner(std::string const& str) {
+    std::shared_ptr<DebugScanner> ret(new DebugScanner);
+    ret->strs.insert(ret->strs.end(), str.begin(), str.end());
+    return ret;
 }
 
 void TestSuite::integrationTest() {
